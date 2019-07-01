@@ -52,6 +52,9 @@ build:
     - docker run -d --name nginx -p 80:80 $CI_REGISTRY_IMAGE_FULL curl localhost
     - docker rm -f nginx
     - docker push $CI_REGISTRY_IMAGE_FULL
+  only:
+    - /^release.*$/
+
 ```
 
 ##### 5. Entrar no diretório do gitlab e criar os diretórios de dados/config/logs.
