@@ -3,17 +3,17 @@ Autor: Rodrigo Floriano (ChurrOps)
 
 #### 1. Possuir ou criar uma conta no DockerHub ou em algum outro registry
 
-
 #### 2. Criar um repositório para a imagem que será utilizada nesse exemplo
 
 #### 3. Clonar o projeto
 
 ```
-git clone
+git clone https://github.com/churrops/gitlabci-docker-example.git
 cd gitlabci-docker-example
+rm -rf .git
 ```
 
-Criar o arquivo ".gitlab-ci.yml" na raiz do projeto
+#### 4. Criar o arquivo ".gitlab-ci.yml" na raiz do projeto
 
 ```
 vim .gitlab-ci.yml
@@ -54,7 +54,7 @@ build:
     - docker push $CI_REGISTRY_IMAGE_FULL
 ```
 
-Entrar no diretório do gitlab e criar os diretórios de dados
+##### 5. Entrar no diretório do gitlab e criar os diretórios de dados/config/logs.
 
 ```
 cd gitlab
@@ -64,7 +64,7 @@ mkdir -p gitlab/config gitlab/logs gitlab/data
 mkdir -p gitlab-runner/config
 ```
 
-Download das imagens do gitlab e do gitlab-runner
+##### 6. Download das imagens do gitlab e do gitlab-runner
 
 ```
 docker pull gitlab/gitlab-ce:12.0.2-ce.0
@@ -72,9 +72,20 @@ docker pull gitlab/gitlab-ce:12.0.2-ce.0
 docker pull gitlab/gitlab-runner:v12.0.1
 ```
 
-Subir o projeto do gitlab
+##### 7. Subir o projeto do gitlab
 
 ```
 docker-compose up -d
 ```
+
+```
+GITLAB_IP=$(docker container inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' gitlab)
+```
+
+```
+echo $GITLAB_IP gitlab.docker >> /etc/hosts
+```
+
+http://127.0.0.1
+
 
