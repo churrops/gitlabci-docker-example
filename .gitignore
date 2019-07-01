@@ -1,0 +1,6 @@
+gitlab/gitlab
+gitlab/gitlab/*
+gitlab/gitlab-runner
+gitlab/gitlab-runner/*
+.gitlab-ci.yml
+.*.swp

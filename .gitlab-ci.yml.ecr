@@ -1,0 +1,32 @@
+image: docker:18
+
+stages:
+  - build
+
+variables:
+  CI_REGISTRY_URL: index.docker.io/v1
+  CI_REGISTRY_USER: 
+  CI_REGISTRY_PASSWORD: ''
+  CI_REGISTRY_IMAGE: rodrigochurrops/awesome-ci
+  CI_REGISTRY_IMAGE_FULL: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
+
+services:
+  - docker:dind
+
+before_script:
+  - >
+    echo -n $CI_REGISTRY_PASSWORD | docker login
+    -u $CI_REGISTRY_USER
+    --password-stdin $CI_REGISTRY
+
+build:
+  stage: build
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - docker build --pull -t $CI_REGISTRY_IMAGE_FULL .
+    - docker image ls
+    - echo $CI_REGISTRY_IMAGE_FULL
+    - docker run -d --name nginx -p 80:80 $CI_REGISTRY_IMAGE_FULL curl localhost
+    - docker rm -f nginx
+    - docker push $CI_REGISTRY_IMAGE_FULL
+
