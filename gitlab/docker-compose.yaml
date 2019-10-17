@@ -17,6 +17,8 @@ services:
   runner:
     container_name: runner
     image: 'gitlab/gitlab-runner:v12.0.1'
+    depends_on:
+      - gitlab
     networks:
       - 'gitlab'
     restart: always
